@@ -45,20 +45,21 @@ def player_heal(health):
         print("You healed 10 hp!!")
         health = heal + health
     return health
-
-while player_hp > 0 and enemy_hp > 0:
-    print(player_hp)
-    print(enemy_hp)
-    a = input("Press 1 for Attack,Press 2 for heal." )
-    a = float(a)
-    player_hp = enemy_atk(player_hp)
-    if a == 1 and player_hp > 0:
-        enemy_hp = player_atk(enemy_hp)
-    elif a == 2 and player_hp > 0:
-        player_hp = player_heal(player_hp)
-    else:
-        break
-
+def fight(php, ehp):
+    while php > 0 and ehp > 0:
+        print(php)
+        print(ehp)
+        a = input("Press 1 for Attack,Press 2 for heal." )
+        a = float(a)
+        php = enemy_atk(php)
+        if a == 1 and php > 0:
+            ehp = player_atk(ehp)
+        elif a == 2 and php > 0:
+            php = player_heal(php)
+        else:
+            break
+    return php
+player_hp = fight(player_hp, enemy_hp)
 if player_hp <= 0:
     print("GAME OVER!!!")
 elif enemy_hp <= 0:
