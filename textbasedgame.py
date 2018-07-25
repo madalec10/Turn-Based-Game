@@ -4,17 +4,12 @@
 Created on Tue Jul 24 08:01:03 2018
 
 @author: stem
-"""import random
+"""
+
+import random
 player_hp = 60
 enemy_hp = random.randint(40, 70)
-damage_received = 0
-damage_dealt = 0
-
-#def stats(e_atk, p_atk, heal):
-#    total_recieved = avg_recieved + e_atk
-#    total_dealt = total_dealt + p_atk
-#    total_healed = total_healed + heal
-    
+x = 1
 
 def enemy_atk(php):
     miss_or_hit = random.randint(1, 3)
@@ -26,18 +21,43 @@ def enemy_atk(php):
         print ("Enemy dealt", enemy_dmg, "damage!")
     return php
     
-def player_atk(ehp):
-    roll = random.randint(1, 6)
-    if roll < 3:
-        print("You missed!")
-    elif roll < 6:
-        dmg = random.randint(3, 8)
-        ehp = ehp - dmg
-        print("You dealt", dmg, "damage!")
-    else:
-        dmg = 10
-        ehp = ehp - dmg
-        print("You dealt", dmg, "damage!")
+def player_atk(ehp, x):
+    if x == 1:
+        roll = random.randint(1, 6)
+        if roll < 3:
+            print("You missed!")
+        elif roll < 6:
+            dmg = random.randint(3, 8)
+            ehp = ehp - dmg
+            print("You dealt", dmg, "damage!")
+        else:
+            dmg = 10
+            ehp = ehp - dmg
+            print("You dealt", dmg, "damage!")
+    elif x == 2:
+        roll = random.randint(1, 6)
+        if roll < 2:
+            print("You missed!")
+        elif roll < 6:
+            dmg = random.randint(5, 8)
+            ehp = ehp - dmg
+            print("You dealt", dmg, "damage!")
+        else:
+            dmg = 11
+            ehp = ehp - dmg
+            print("You dealt", dmg, "damage!")
+    elif x == 3:
+        roll = random.randint(1, 6)
+        if roll < 3:
+            print("You missed!")
+        elif roll < 6:
+            dmg = random.randint(4, 10)
+            ehp = ehp - dmg
+            print("You dealt", dmg, "damage!")
+        else:
+            dmg = 13
+            ehp = ehp - dmg
+            print("You dealt", dmg, "damage!")
     return ehp
 
 def player_heal(health):
@@ -65,7 +85,7 @@ def fight(php, ehp):
             a = float(a)
         php = enemy_atk(php)
         if a == 1 and php > 0:
-            ehp = player_atk(ehp)
+            ehp = player_atk(ehp, x)
         elif a == 2 and php > 0:
             php = player_heal(php)
         elif php > 0:
@@ -98,6 +118,10 @@ if choice1 == "y" or choice1 == "yes":
         if choice2 == "yes" or choice2 == "y":
             print("You start to look around your farm for any other people, but find medical supplies instead. So you decided to heal yourself. You are now fully healed.")
             player_hp = 60
+            pitchfork = input("In addition to your medicine, you found a pitchfork. Do you want to pick it up? (y/n) ")
+            if pitchfork == "yes" or pitchfork == "y":
+                x = 2
+            print()
             print("You also find a cultist snooping around your farm, and to your luck he doesn't see you.")
             choice3 = input("Do you want to follow the cultist? (y/n) ")
             print()
@@ -110,8 +134,11 @@ if choice1 == "y" or choice1 == "yes":
                 elif player_hp > 0:
                     print()
                     print("Somehow you were able to take out the guard, and you sneaked into the hideout.")
-                    print("You quietly search around the hideout and find some bread. You eat the bread and feel awesome.")
+                    sword = input("You quietly search around the hideout and find some bread and a buster sword. You eat the bread and feel awesome. Do you want to pick up the buster sword? (y/n) ")
                     player_hp = 80
+                    if sword == "y" or sword == "yes":
+                        x = 3
+                    print()
                     print("After you search the hideout, you go out the back and find a shack. You find the cultist leader inside and she slashes at you first")
                     enemy_hp = random.randint(80, 100)
                     player_hp = fight(player_hp, enemy_hp)
