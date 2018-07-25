@@ -10,6 +10,13 @@ import random
 player_hp = 60
 enemy_hp = random.randint(40, 70)
 x = 1
+p_total_dmg = 0
+t_dmg_counter = 0
+dmg_taken = 0
+dmg_taken_counter = 0
+total_heals = 0
+t_h_counter = 0
+turns_taken = 0
 
 def enemy_atk(php):
     miss_or_hit = random.randint(1, 3)
@@ -227,3 +234,5 @@ elif choice1 == "no" or choice1 == "n":
     print ("You go to sleep and never wake up. GAME OVER!!!")
 else:
     print ("Well",name,"you didn't put yes or no, sooooo... you just stood there and died. GAME OVER!!!")
+print()
+stats(p_total_dmg, dmg_taken, total_heals, t_dmg_counter, dmg_taken_counter, t_h_counter, turns_taken)
