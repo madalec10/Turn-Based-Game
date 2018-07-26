@@ -15,10 +15,12 @@ t_dmg_counter = 0
 dmg_taken = 0
 dmg_taken_counter = 0
 total_heals = 0
-t_h_counter = 0
+t_h_counter = 1
 turns_taken = 0
 
 def enemy_atk(php):
+    global dmg_taken
+    global dmg_taken_counter
     miss_or_hit = random.randint(1, 3)
     if miss_or_hit == 1:
         print("Enemy missed")
@@ -26,9 +28,13 @@ def enemy_atk(php):
         enemy_dmg = random.randint(3, 8)
         php = php - enemy_dmg
         print ("Enemy dealt", enemy_dmg, "damage!")
+        dmg_taken += enemy_dmg
+        dmg_taken_counter += 1
     return php
     
 def player_atk(ehp, x):
+    global p_total_dmg
+    global t_dmg_counter
     if x == 1:
         roll = random.randint(1, 6)
         if roll < 3:
@@ -37,10 +43,14 @@ def player_atk(ehp, x):
             dmg = random.randint(3, 8)
             ehp = ehp - dmg
             print("You dealt", dmg, "damage!")
+            p_total_dmg += dmg
+            t_dmg_counter += 1
         else:
             dmg = 10
             ehp = ehp - dmg
             print("You dealt", dmg, "damage!")
+            p_total_dmg += dmg
+            t_dmg_counter +=1
     elif x == 2:
         roll = random.randint(1, 6)
         if roll < 2:
@@ -49,10 +59,14 @@ def player_atk(ehp, x):
             dmg = random.randint(5, 8)
             ehp = ehp - dmg
             print("You dealt", dmg, "damage!")
+            p_total_dmg += dmg
+            t_dmg_counter += 1
         else:
             dmg = 11
             ehp = ehp - dmg
             print("You dealt", dmg, "damage!")
+            p_total_dmg += dmg
+            t_dmg_counter += 1
     elif x == 3:
         roll = random.randint(1, 6)
         if roll < 3:
@@ -61,13 +75,35 @@ def player_atk(ehp, x):
             dmg = random.randint(4, 10)
             ehp = ehp - dmg
             print("You dealt", dmg, "damage!")
+            p_total_dmg += dmg
+            t_dmg_counter += 1
         else:
             dmg = 13
             ehp = ehp - dmg
             print("You dealt", dmg, "damage!")
+            p_total_dmg += dmg
+            t_dmg_counter += 1
+    elif x == 4:
+        roll = random.randint(1, 6)
+        if roll < 3:
+            print("You missed!")
+        elif roll < 6:
+            dmg = random.randint(5, 12)
+            ehp = ehp - dmg
+            print("You dealt", dmg, "damage!")
+            p_total_dmg += dmg
+            t_dmg_counter += 1
+        else:
+            dmg = 15
+            ehp = ehp - dmg
+            print("You dealt", dmg, "damage!")
+            p_total_dmg += dmg
+            t_dmg_counter += 1
     return ehp
 
 def player_heal(health):
+    global total_heals
+    global t_h_counter
     roll = random.randint(1, 6)
     if health >= 58:
         print("Health is full")
@@ -77,14 +113,20 @@ def player_heal(health):
         heal = random.randint(2, 6)
         print("You healed", heal, "hp!")
         health = heal + health
+        total_heals += heal
+        t_h_counter += 1
     else:
-        heal = 8
+        heal = 10
         print("You healed 8 hp!!")
         health = heal + health
+        total_heals += heal
+        t_h_counter += 1
     return health
 
 def fight(php, ehp):
+    global turns_taken
     while php > 0 and ehp > 0:
+        turns_taken += 1
         print("Your health is", php)
         print("Enemy's health is", ehp)
         a = input("Press 1 for Attack,Press 2 for heal." )
@@ -107,7 +149,19 @@ def fight(php, ehp):
                 print ("You just stood there and looked the enemy in the eye")
     return php
 
+def stats(p_dmg, dmg_tak, t_heals, p_counter, taken_counter, h_counter, turns):
+    if p_counter > 0 and taken_counter > 0 and h_counter > 0:
+        avg_dealt = p_dmg / p_counter
+        avg_taken = dmg_tak / taken_counter
+        avg_heal = t_heals / h_counter
+        print("Your average damage dealt was", avg_dealt)
+        print("Your average damage taken was", avg_taken)
+        print("Your average heal was", avg_heal)
+        print("You had", turns,"turns this round")
+
 name = input("Please enter your name: ")
+while name == "":
+    name = input("Please enter your name, I am losing my patience: ")
 print()
 print ("You wake up to a loud crash outside your home. It is quiet for a moment, but then there is another loud bang. You don’t know what is out there, so you grab your sword and some food and venture outside to see what the noise was. A cloaked figure is ransacking your farm and stealing your store for the winter.")
 choice1 = input("Do you wish to investigate? (y/n) ")
@@ -134,7 +188,7 @@ if choice1 == "y" or choice1 == "yes":
             print()
             if choice3 == "yes" or choice3 == "y":
                 print("You end up secretly following the cultist back to his lair, but you encounter a guard outside. The guard attacks you!")
-                enemy_hp = random.randint (30, 50)
+                enemy_hp = random.randint (40, 55)
                 player_hp = fight(player_hp, enemy_hp)
                 if player_hp <= 0:
                     print("The guard has bested you. You are dead. GAME OVER!!!")
@@ -142,7 +196,7 @@ if choice1 == "y" or choice1 == "yes":
                     print()
                     print("Somehow you were able to take out the guard, and you sneaked into the hideout.")
                     sword = input("You quietly search around the hideout and find some bread and a buster sword. You eat the bread and feel awesome. Do you want to pick up the buster sword? (y/n) ")
-                    player_hp = 80
+                    player_hp = 60
                     if sword == "y" or sword == "yes":
                         x = 3
                     print()
@@ -154,8 +208,42 @@ if choice1 == "y" or choice1 == "yes":
                         print("The cultist leader slices your throat. You fall down dead. GAME OVER!!!")
                     elif player_hp > 0:
                         print("You have slain the cultist leader, and took down their regime.")
-                        print("Congratulation, you have beaten my game. Well done, here is you prize, a giant cookie that you can't eat!!!")
-                
+#                        print("Congratulation, you have beaten my game. Well done, here is you prize, a giant cookie that you can't eat!!!")
+                        print()
+                        print("After you successfully slew the cult, you went home and thought about what had happened. You ventured into your house, and on the ground you found a book that was left from on of the cultists.")
+                        player_hp = 60
+                        book = input("Do you want to open and read the book? (y/n) ")
+                        print()
+                        if book == "yes" or book == "y":
+                            print("By opening the book, you read and recite an old cantation. Not long after, a fallen star appears in front of you and leads you to a small cave. Before you know it, you are in a fight with a cultist who wanted revenge.")
+                            enemy_hp = random.randint(60, 80)
+                            fight(player_hp, enemy_hp)
+                            if player_hp <= 0:
+                                print("Wow, you died to a petty minion. Shame on you. GAME OVER!!!")
+                            elif player_hp > 0:
+                                print("You bested the minion, and are able to explore the cave. You find a diamond plated sword.")
+                                sword2 = input("Do you want to pick up the diamond plated sword? (y/n) ")
+                                if sword2 == "yes" or sword2 == "y":
+                                    x = 4
+                                print("You leave the cave and return home to rest")
+                                player_hp = 60
+                        elif book == "no" or book == "n":
+                            print("You put the book away.")
+                            search = input("Do you want to continue exploring the farm? (y/n) ")
+                            if search == "yes" or search == "y":
+                                print("You looked around in the barn and found that the whole place had been sacked. Under the remains you found a cloak.")
+                                cloak = input("Do you want to pick up the cloak? (y/n) ")
+                                if cloak == "yes" or cloak == "y":
+                                     print("Your base health has increased by 15")
+                                     player_hp = 75
+                            elif search == "no" or search == "n":
+                                print("You go back to bed.")
+                            else:
+                                print("Fine, give the wrong anwser then.")
+                        else:
+                            print("You made it this far and just threw away your sword and or cloak.")
+                        print ("Now you clean up your barn and put everything back to normal.")
+                        
             elif choice3 == "no" or choice3 == "n":
                 print("Ok, so you decided not to chase him, and you go into town instead.")
                 print("You ask around town about the cult, but nobody gives you any leads. After three hours of asking, you finally find an old man who says he knows where the cult group is located.")
@@ -211,7 +299,30 @@ if choice1 == "y" or choice1 == "yes":
                             choice6 = input("Do you want to join Sugo and the cult? (y/n) ")
                             print()
                             if choice6 == "yes" or choice6 == "y":
-                                print("So you joined the cult. Congratulations, you get the cultist ending, you phsycopath!")
+#                                print("So you joined the cult. Congratulations, you get the cultist ending, you phsycopath!")
+                                print("For a reward of joining the cult, Sugo offers you a buster sword")
+                                print()
+                                b_sword = input("Do you want to take the buster sword? (y/n) ")
+                                if b_sword == "yes" or b_sword == "y":
+                                    x = 3
+                                print()
+                                print("After she offers you the sword, she says that she is the leader of the cult. You are baffled.")
+                                print()
+                                betray = input("Do you want to betray her (y/n) ")
+                                print()
+                                if betray == "y" or betray == "yes":
+                                    print("You have decided to turn against her and fight for the place of leader of the cult.")
+                                    enemy_hp = random.randint(80, 100)
+                                    fight(player_hp, enemy_hp)
+                                    if player_hp <= 0:
+                                        print("You have been slain by Sugo, the true leader of the cult", name, "GAME OVER!!!")
+                                    elif player_hp > 0:
+                                        print("Sugo, now laying on the ground, has been taken out, and you are now the leader of the cult. Everyone is now in your command, and you have power over the whole cult.")
+                                        print("")
+                                elif betray == "n" or betray == "no":
+                                    print("Since you are now under Sugo, she has you go after the last person who tried to kill her. His name is hank.")
+                                else:
+                                    print("What are you doing here", name, "you lazy bum, get out of here! GAME OVER!!!")
                             elif choice6 == "no" or choice6 == "n":
                                 print("Sugo said you knew too much, and you were executed on the spot. GAME OVER!!!")
                             else:
